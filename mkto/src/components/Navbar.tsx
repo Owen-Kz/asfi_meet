@@ -21,11 +21,6 @@ import Settings, {
   SettingsWithViewWrapper,
   SettingsIconButtonProps,
 } from './Settings';
-
-import Posters, {
-  PostersWithViewWrapper,
-  PostersIconButtonProps,
-} from './posters';
 import CopyJoinInfo, {CopyJoinInfoProps} from '../subComponents/CopyJoinInfo';
 import {SidePanelType} from '../subComponents/SidePanelEnum';
 import ChatContext from '../components/ChatContext';
@@ -399,13 +394,6 @@ const SettingsIconButtonWithWrapper = (props: SettingsIconButtonProps) => {
   return <SettingsWithViewWrapper {...props} />;
 };
 
-export const PostersIconButton = (props: PostersIconButtonProps) => {
-  return <Posters {...props} />;
-};
-const PostersIconButtonWithWrapper = (props: PostersIconButtonProps) => {
-  return <PostersWithViewWrapper {...props} />;
-};
-
 export const MeetingTitleToolbarItem = () => {
   const {
     data: {meetingTitle},
@@ -479,13 +467,7 @@ export const SettingsToobarItem = () => {
     </ToolbarItem>
   );
 };
-export const SettingsPosterItem = () => {
-  return (
-    <ToolbarItem testID="videocall-settingsicon">
-      <PostersIconButtonWithWrapper />
-    </ToolbarItem>
-  );
-};
+
 const defaultItems: ToolbarDefaultItem[] = [
   {
     align: 'start',
@@ -529,13 +511,6 @@ const defaultItems: ToolbarDefaultItem[] = [
     order: 2,
     hide: 'no',
   },
-  {
-    align: 'end',
-    componentName: 'posters',
-    component: SettingsPosterItem,
-    order: 3,
-    hide: 'no',
-  }
 ];
 
 export interface NavbarProps {
