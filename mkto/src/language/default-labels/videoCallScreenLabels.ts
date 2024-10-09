@@ -79,6 +79,7 @@ export enum I18nDeviceStatus {
 export const toolbarItemPeopleText = 'toolbarItemPeopleText';
 export const toolbarItemChatText = 'toolbarItemChatText';
 export const toolbarItemSettingText = 'toolbarItemSettingText';
+export const toolbarItemPostersText = 'toolbarItemPosters';
 
 export const toolbarItemLayoutText = 'toolbarItemLayoutText';
 export const toolbarItemLayoutOptionGridText =
@@ -532,6 +533,7 @@ export interface I18nVideoCallScreenLabelsInterface {
   [toolbarItemPeopleText]?: I18nBaseType;
   [toolbarItemChatText]?: I18nBaseType;
   [toolbarItemSettingText]?: I18nBaseType;
+  [toolbarItemPostersText]?: I18nBaseType;
 
   [toolbarItemLayoutText]?: I18nBaseType;
   [toolbarItemInviteText]?: I18nBaseType;
@@ -843,6 +845,7 @@ export const VideoCallScreenLabels: I18nVideoCallScreenLabelsInterface = {
   [toolbarItemPeopleText]: 'People',
   [toolbarItemChatText]: 'Chat',
   [toolbarItemSettingText]: 'Settings',
+  [toolbarItemPostersText]: 'Posters',
   [toolbarItemLayoutText]: 'Layout',
   [toolbarItemInviteText]: 'Invite',
 

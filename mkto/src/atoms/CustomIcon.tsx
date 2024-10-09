@@ -39,6 +39,7 @@ export interface IconsInterface {
   participants: string;
   chat: string;
   settings: string;
+  posters: string;
   'more-menu': string;
   share: string;
   'switch-camera': string;

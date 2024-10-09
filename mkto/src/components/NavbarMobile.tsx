@@ -9,6 +9,7 @@ import {
 import {
   MeetingTitleToolbarItem,
   ParticipantCountToolbarItem,
+  PostersToolbarItem,
   RecordingStatusToolbarItem,
 } from './Navbar';
 import {useRecording} from '../subComponents/recording/useRecording';
@@ -42,6 +43,13 @@ const NavbarMobile = (props: NavbarProps) => {
       componentName: 'recording-status',
       component: isRecordingActive ? RecordingStatusToolbarItem : null,
       order: 2,
+      hide: 'no',
+    },
+    {
+      align: 'start',
+      componentName: 'posters',
+      component: PostersToolbarItem,
+      order: 0,
       hide: 'no',
     },
   ];

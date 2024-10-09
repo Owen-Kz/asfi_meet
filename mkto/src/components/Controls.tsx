@@ -100,6 +100,7 @@ import {
   toolbarItemRecordingText,
   toolbarItemViewRecordingText,
   toolbarItemSettingText,
+  toolbarItemPostersText,
   toolbarItemShareText,
   toolbarItemTranscriptText,
   toolbarItemVirtualBackgroundText,
@@ -256,6 +257,7 @@ const MoreButton = () => {
   const captionLabel = useString<boolean>(toolbarItemCaptionText);
   const transcriptLabel = useString<boolean>(toolbarItemTranscriptText);
   const settingsLabel = useString(toolbarItemSettingText)();
+  const postersLabel = useString(toolbarItemPostersText)();
   const screenShareButton = useString<boolean>(toolbarItemShareText);
   const recordingButton = useString<boolean>(toolbarItemRecordingText);
   const viewRecordingsLabel = useString<boolean>(
@@ -655,6 +657,18 @@ const MoreButton = () => {
       callback: () => {
         setActionMenuVisible(false);
         setSidePanel(SidePanelType.Settings);
+      },
+    });
+  }
+  if (globalWidth <= BREAKPOINTS.sm) {
+    actionMenuitems.push({
+      icon: 'stack',
+      iconColor: $config.SECONDARY_ACTION_COLOR,
+      textColor: $config.FONT_COLOR,
+      title: postersLabel,
+      callback: () => {
+        setActionMenuVisible(false);
+        setSidePanel(SidePanelType.Posters);
       },
     });
   }

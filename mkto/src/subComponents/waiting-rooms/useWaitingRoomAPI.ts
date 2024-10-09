@@ -22,7 +22,7 @@ interface IuseWaitingRoomAPI {
   }) => Promise<void>;
 }
 
-const WAITING_ROOM_URL = `${$config.BACKEND_ENDPOINT}/v1/channel/join`;
+const WAITING_ROOM_URL = `http://localhost:2020/v1/channel/join`;
 
 const useWaitingRoomAPI = (): IuseWaitingRoomAPI => {
   const {store} = React.useContext(StorageContext);

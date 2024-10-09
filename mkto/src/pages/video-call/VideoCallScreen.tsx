@@ -42,6 +42,7 @@ import useFindActiveSpeaker from '../../utils/useFindActiveSpeaker';
 import VBPanel from '../../components/virtual-background/VBPanel';
 import {LogSource, logger} from '../../logger/AppBuilderLogger';
 import {useIsRecordingBot} from '../../subComponents/recording/useIsRecordingBot';
+import PostersView from '../../components/PostersView';
 
 const VideoCallScreen = () => {
   useFindActiveSpeaker();
@@ -56,6 +57,7 @@ const VideoCallScreen = () => {
     BottombarComponent,
     ParticipantsComponent,
     SettingsComponent,
+    PostersComponent,
     TopbarComponent,
     VideocallBeforeView,
     VideocallAfterView,
@@ -74,6 +76,7 @@ const VideoCallScreen = () => {
       BottombarComponent: React.ComponentType<ControlsProps>;
       ParticipantsComponent: React.ComponentType;
       SettingsComponent: React.ComponentType;
+      PostersComponent: React.ComponentType;
       TopbarComponent: React.ComponentType<NavbarProps>;
       VideocallBeforeView: React.ComponentType;
       VideocallAfterView: React.ComponentType;
@@ -89,6 +92,7 @@ const VideoCallScreen = () => {
       ChatComponent: Chat,
       ParticipantsComponent: ParticipantsView,
       SettingsComponent: SettingsView,
+      PostersComponent: PostersView,
       VideocallAfterView: React.Fragment,
       VideocallBeforeView: React.Fragment,
       VideocallWrapper: React.Fragment,
@@ -310,6 +314,11 @@ const VideoCallScreen = () => {
               )}
               {sidePanel === SidePanelType.Settings ? (
                 <SettingsComponent />
+              ) : (
+                <></>
+              )}
+              {sidePanel === SidePanelType.Posters ? (
+                <PostersComponent />
               ) : (
                 <></>
               )}

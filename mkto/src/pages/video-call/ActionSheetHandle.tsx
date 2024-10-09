@@ -7,6 +7,7 @@ import {
   ChatHeader,
   PeopleHeader,
   SettingsHeader,
+  PostersHeader,
   TranscriptHeader,
 } from './SidePanelHeader';
 
@@ -22,6 +23,7 @@ const ActionSheetHandle = (props: {sidePanel: SidePanelType}) => {
       {sidePanel === SidePanelType.Participants && <PeopleHeader />}
       {sidePanel === SidePanelType.Chat && <ChatHeader />}
       {sidePanel === SidePanelType.Settings && <SettingsHeader />}
+      {sidePanel === SidePanelType.Posters && <PostersHeader />}
       {sidePanel === SidePanelType.Transcript && <TranscriptHeader />}
     </View>
   );

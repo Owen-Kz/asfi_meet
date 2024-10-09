@@ -18,6 +18,8 @@ import Spacer from '../../atoms/Spacer';
 import Transcript from '../../subComponents/caption/Transcript';
 import {ToolbarProvider} from '../../utils/useToolbar';
 import {ActionSheetProvider} from '../../utils/useActionSheet';
+import PostersView from '../../components/PostersView';
+
 
 const ActionSheet = props => {
   const {snapPointsMinMax = [100, 400]} = props;
@@ -25,16 +27,19 @@ const ActionSheet = props => {
   const [isExpanded, setIsExpanded] = React.useState(false);
   const [isChatOpen, setIsChatOpen] = React.useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
+  const [isPostersOpen, setIsPostersOpen] = React.useState(false);
+
   const [isParticipantsOpen, setIsParticipantsOpen] = React.useState(false);
   const [isTranscriptOpen, setIsTranscriptOpen] = React.useState(false);
   const bottomSheetRef = useRef<BottomSheetRef>(null);
   const chatSheetRef = useRef<BottomSheetRef>(null);
   const participantsSheetRef = useRef<BottomSheetRef>(null);
   const settingsSheetRef = useRef<BottomSheetRef>(null);
+  const postersSheetRef = useRef<BottomSheetRef>(null);
   const transcriptSheetRef = useRef<BottomSheetRef>(null);
   const ToastComponentRender =
     isMobileUA() &&
-    (isChatOpen || isSettingsOpen || isParticipantsOpen || isTranscriptOpen) ? (
+    (isChatOpen || isSettingsOpen || isParticipantsOpen || isTranscriptOpen || isPostersOpen) ? (
       <ToastComponent />
     ) : (
       <></>
@@ -58,13 +63,14 @@ const ActionSheet = props => {
       isChatOpen ||
       isSettingsOpen ||
       isParticipantsOpen ||
-      isTranscriptOpen
+      isTranscriptOpen ||
+      isPostersOpen
     ) {
       setActionSheetVisible(true);
     } else {
       setActionSheetVisible(false);
     }
-  }, [isChatOpen, isSettingsOpen, isParticipantsOpen, isTranscriptOpen]);
+  }, [isChatOpen, isSettingsOpen, isParticipantsOpen, isTranscriptOpen, isPostersOpen]);
 
   // updating on sidepanel changes
   useEffect(() => {
@@ -81,6 +87,10 @@ const ActionSheet = props => {
         setIsSettingsOpen(true);
         break;
       }
+      case SidePanelType.Posters: {
+        setIsPostersOpen(true);
+        break;
+      }
       case SidePanelType.Transcript: {
         setIsTranscriptOpen(true);
         break;
@@ -89,6 +99,7 @@ const ActionSheet = props => {
         setIsChatOpen(false);
         setIsParticipantsOpen(false);
         setIsSettingsOpen(false);
+        setIsPostersOpen(false);
         setIsTranscriptOpen(false);
         handleSheetChanges(0);
       }
@@ -120,7 +131,7 @@ const ActionSheet = props => {
   };
 
   const updateActionSheet = (
-    screenName: 'chat' | 'participants' | 'settings',
+    screenName: 'chat' | 'participants' | 'settings' | 'posters',
   ) => {
     switch (screenName) {
       case 'chat':
@@ -132,6 +143,10 @@ const ActionSheet = props => {
       case 'settings':
         console.warn('settings selected');
         setIsSettingsOpen(true);
+        break;
+      case 'posters':
+        console.warn('posters selected');
+        setIsPostersOpen(true);
         break;
       default:
     }
@@ -222,6 +237,19 @@ const ActionSheet = props => {
           header={<ActionSheetHandle sidePanel={SidePanelType.Settings} />}
           blocking={false}>
           <SettingsView showHeader={false} />
+        </BottomSheet>
+        {/* posters Action Sheet  */}
+        <BottomSheet
+          sibling={ToastComponentRender}
+          ref={postersSheetRef}
+          onDismiss={onDismiss}
+          open={isPostersOpen}
+          expandOnContentDrag={false}
+          snapPoints={({maxHeight}) => [1 * maxHeight]}
+          defaultSnap={({lastSnap, snapPoints}) => snapPoints[0]}
+          header={<ActionSheetHandle sidePanel={SidePanelType.Posters} />}
+          blocking={false}>
+          <PostersView showHeader={false} />
         </BottomSheet>
         {/* Transcript  Action Sheet */}
         <BottomSheet

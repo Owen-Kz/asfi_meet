@@ -28,7 +28,7 @@ class RTMEngine {
   }
 
   private async createClientInstance() {
-    await this.engine.createClient($config.APP_ID);
+    await this.engine.createClient('1a35d52dc4874d13997a411ec640b1c6');
   }
 
   private async destroyClientInstance() {

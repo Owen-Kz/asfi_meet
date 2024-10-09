@@ -1,54 +1,25 @@
-import {useContext} from 'react';
-import {gql} from '@apollo/client';
+import { useContext } from 'react';
+import { gql } from '@apollo/client';
 import StorageContext from '../components/StorageContext';
-import {RoomInfoContextInterface} from '../components/room-info/useRoomInfo';
-import {useSetRoomInfo} from '../components/room-info/useSetRoomInfo';
-import {GraphQLContext} from '../components/GraphQLProvider';
+import { RoomInfoContextInterface } from '../components/room-info/useRoomInfo';
+import { useSetRoomInfo } from '../components/room-info/useSetRoomInfo';
+import { GraphQLContext } from '../components/GraphQLProvider';
 import useGetName from './useGetName';
 import useWaitingRoomAPI from '../subComponents/waiting-rooms/useWaitingRoomAPI';
-import {base64ToUint8Array} from '../utils';
-import {LogSource, logger} from '../logger/AppBuilderLogger';
-
-const JOIN_CHANNEL_PHRASE_AND_GET_USER = gql`
-  query JoinChannel($passphrase: String!) {
-    joinChannel(passphrase: $passphrase) {
-      channel
-      title
-      isHost
-      secret
-      chat {
-        groupId
-        userToken
-        isGroupOwner
-      }
-      secretSalt
-      mainUser {
-        rtc
-        rtm
-        uid
-      }
-      whiteboard {
-        room_uuid
-        room_token
-      }
-      screenShare {
-        rtc
-        rtm
-        uid
-      }
-    }
-    getUser {
-      name
-      email
-    }
-  }
-`;
+import { base64ToUint8Array } from '../utils';
+import { LogSource, logger } from '../logger/AppBuilderLogger';
 
 const JOIN_CHANNEL_PHRASE = gql`
   query JoinChannel($passphrase: String!) {
     joinChannel(passphrase: $passphrase) {
+      token
+      rtmToken
+      uid
       channel
       title
+      meetingTitle
+      attendee
+      host
       isHost
       secret
       chat {
@@ -74,37 +45,37 @@ const JOIN_CHANNEL_PHRASE = gql`
     }
   }
 `;
+
 /**
  * Returns an asynchronous function to join a meeting with the given phrase.
  */
-
 export interface joinRoomPreference {
   disableShareTile: boolean;
 }
 
 export default function useJoinRoom() {
-  const {store} = useContext(StorageContext);
-  const {setRoomInfo} = useSetRoomInfo();
-
-  const {client} = useContext(GraphQLContext);
-  const username = useGetName();
-  const {request: requestToJoin} = useWaitingRoomAPI();
+  const { store } = useContext(StorageContext);
+  const { setRoomInfo } = useSetRoomInfo();
+  const { client } = useContext(GraphQLContext);
+  const { request: requestToJoin } = useWaitingRoomAPI();
   const isWaitingRoomEnabled = $config.ENABLE_WAITING_ROOM;
 
   return async (phrase: string, preference?: joinRoomPreference) => {
-    setRoomInfo(prevState => {
-      return {
-        ...prevState,
-        isJoinDataFetched: false,
-      };
-    });
+    setRoomInfo(prevState => ({
+      ...prevState,
+      isJoinDataFetched: false,
+    }));
+    
+    console.log("Joining channel with passphrase:", phrase); // Log the passphrase
+
     try {
       let response = null;
+      
       if (isWaitingRoomEnabled) {
         logger.log(
           LogSource.NetworkRest,
           'channel_join_request',
-          'API channel_join_request. Trying request to join channel as waiting room is enabled',
+          'API channel_join_request. Trying request to join channel as waiting room is enabled'
         );
         response = await requestToJoin({
           meetingPhrase: phrase,
@@ -114,150 +85,93 @@ export default function useJoinRoom() {
         logger.log(
           LogSource.NetworkRest,
           'joinChannel',
-          'API joinChannel. Trying to join channel. Waiting room is disabled',
+          'API joinChannel. Trying to join channel. Waiting room is disabled'
         );
+        console.log('Client',client);
+        console.log('clientPhrase', phrase);
         response = await client.query({
-          query:
-            store.token === null
-              ? JOIN_CHANNEL_PHRASE
-              : JOIN_CHANNEL_PHRASE_AND_GET_USER,
-          variables: {
-            passphrase: phrase,
-            //userName: username,
-          },
+          query: JOIN_CHANNEL_PHRASE,
+          variables: { passphrase: phrase },
         });
       }
+      console.log('Response', response);
       if (response?.error) {
         logger.error(
           LogSource.NetworkRest,
-          `${isWaitingRoomEnabled ? 'channel_join_request' : 'joinChannel'}`,
-          `API ${
-            isWaitingRoomEnabled ? 'channel_join_request' : 'joinChannel'
-          } failed.`,
+          'joinChannel',
+          'API joinChannel failed.',
           response?.error,
         );
         throw response.error;
       } else {
-        if ((response && response.data) || isWaitingRoomEnabled) {
-          let data = isWaitingRoomEnabled ? response : response.data;
-          logger.log(
-            LogSource.NetworkRest,
-            `${isWaitingRoomEnabled ? 'channel_join_request' : 'joinChannel'}`,
-            `API to ${
-              isWaitingRoomEnabled ? 'channel_join_request' : 'joinChannel'
-            } successful.`,
-            phrase,
-          );
-          let roomInfo: Partial<RoomInfoContextInterface['data']> = {};
+        const data = isWaitingRoomEnabled ? response : response.data;
+        if (data?.joinChannel) {
+          const roomInfo = data.joinChannel;
+          // Process response data as you have it
+          // ...
+          console.log('MYROOMINFO', roomInfo);
 
-          if (data?.joinChannel?.channel || data?.channel) {
-            roomInfo.channel = isWaitingRoomEnabled
-              ? data.channel
-              : data.joinChannel.channel;
-          }
-          if (data?.joinChannel?.mainUser?.uid || data?.mainUser?.uid) {
-            roomInfo.uid = isWaitingRoomEnabled
-              ? data.mainUser.uid
-              : data.joinChannel.mainUser.uid;
-          }
-          if (data?.joinChannel?.mainUser?.rtc || data?.mainUser?.rtc) {
-            roomInfo.token = isWaitingRoomEnabled
-              ? data.mainUser.rtc
-              : data.joinChannel.mainUser.rtc;
-          }
-          if (data?.joinChannel?.mainUser?.rtm || data?.mainUser?.rtm) {
-            roomInfo.rtmToken = isWaitingRoomEnabled
-              ? data.mainUser.rtm
-              : data.joinChannel.mainUser.rtm;
-          }
-          if (data?.joinChannel?.secret || data?.secret) {
-            roomInfo.encryptionSecret = isWaitingRoomEnabled
-              ? data.secret
-              : data.joinChannel.secret;
-          }
-          if (data?.joinChannel?.secretSalt || data?.secretSalt) {
-            roomInfo.encryptionSecretSalt = base64ToUint8Array(
-              isWaitingRoomEnabled
-                ? data.secretSalt
-                : data.joinChannel.secretSalt,
-            );
-          }
-          if (data?.joinChannel?.screenShare?.uid || data?.screenShare?.uid) {
-            roomInfo.screenShareUid = isWaitingRoomEnabled
-              ? data.screenShare.uid
-              : data.joinChannel.screenShare.uid;
-          }
-          if (data?.joinChannel?.screenShare?.rtc || data?.screenShare?.rtc) {
-            roomInfo.screenShareToken = isWaitingRoomEnabled
-              ? data.screenShare.rtc
-              : data.joinChannel.screenShare.rtc;
-          }
+          setRoomInfo(prevState => ({
+            ...prevState,
+            isJoinDataFetched: true,
+            data: { ...prevState.data, ...roomInfo },
+            roomPreference: { ...preference },
+          }));
 
-          if (data?.joinChannel?.mainUser?.rtm || data?.mainUser?.rtm) {
-            roomInfo.rtmToken = isWaitingRoomEnabled
-              ? data.mainUser.rtm
-              : data.joinChannel.mainUser.rtm;
-          }
-          if (data?.joinChannel?.chat || data?.chat) {
-            const chat: RoomInfoContextInterface['data']['chat'] = {
-              user_token: isWaitingRoomEnabled
-                ? data.chat.userToken
-                : data?.joinChannel?.chat?.userToken,
-              group_id: isWaitingRoomEnabled
-                ? data.chat.groupId
-                : data?.joinChannel?.chat?.groupId,
-              is_group_owner: isWaitingRoomEnabled
-                ? data.chat.isGroupOwner
-                : data?.joinChannel?.chat?.isGroupOwner,
-            };
+          // Utility function to set a cookie with expiry
+   function setCookie(name, value, days) {
+      const date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Convert days to milliseconds
+      const expires = "; expires=" + date.toUTCString();
+      document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
 
-            roomInfo.chat = chat;
-          }
+  
 
-          roomInfo.isHost = isWaitingRoomEnabled
-            ? data.isHost
-            : data.joinChannel.isHost;
+    // Example: Function to save roomInfo in a cookie and update it
+    function saveRoomInfoToCookie(roomInfo) {
+      // You can save specific fields from roomInfo, such as room_uuid
+      const roomInfoData = {
+        attendee: roomInfo.attendee,
+        room_uuid: roomInfo.channel,
+        title: roomInfo.title,
+        isHost: roomInfo.isHost,
+        // Add other properties you want to save
+      };
 
-          if (data?.joinChannel?.title || data?.title) {
-            roomInfo.meetingTitle = isWaitingRoomEnabled
-              ? data.title
-              : data.joinChannel.title;
-          }
-          if (data?.joinChannel?.whiteboard || data?.whiteboard) {
-            const whiteboard: RoomInfoContextInterface['data']['whiteboard'] = {
-              room_token: isWaitingRoomEnabled
-                ? data.whiteboard.room_token
-                : data?.joinChannel?.whiteboard?.room_token,
-              room_uuid: isWaitingRoomEnabled
-                ? data.whiteboard.room_uuid
-                : data?.joinChannel?.whiteboard?.room_uuid,
-            };
-            if (whiteboard?.room_token && whiteboard?.room_uuid) {
-              roomInfo.whiteboard = whiteboard;
-            }
-          }
-          //getUser is not available from backend
-          // if (data?.getUser?.name) {
-          //   roomInfo.username = data.getUser.name;
-          // }
-          setRoomInfo(prevState => {
-            let compiledMeetingInfo = {
-              ...prevState.data,
-              ...roomInfo,
-            };
-            return {
-              ...prevState,
-              isJoinDataFetched: true,
-              data: compiledMeetingInfo,
-              roomPreference: {...preference},
-            };
-          });
+      // Convert the data to JSON and save it in a cookie
+      setCookie('roomInfo', JSON.stringify(roomInfoData), 1); // 1 day expiry
+    }
+
+    // Call this function each time roomInfo is received
+    if (roomInfo) {
+      saveRoomInfoToCookie(roomInfo); // Save or update roomInfo in cookie
+      // console.log('My Room Info:', roomInfo);
+    }
+
+
           return roomInfo;
         } else {
-          throw new Error('An error occurred in parsing the channel data.');
+          throw new Error('No data returned from server.');
         }
       }
     } catch (error) {
+      // Enhanced error handling
+      if (error.networkError) {
+        console.error("Network Error:", error.networkError.result);
+      } else if (error.graphQLErrors) {
+        error.graphQLErrors.forEach(({ message, locations, path }) =>
+          console.error(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`)
+        );
+      } else {
+        console.error("Error:", error.message);
+      }
+      logger.error(
+        LogSource.NetworkRest,
+        'joinChannel',
+        'Error during join channel operation',
+        error
+      );
       throw error;
     }
   };

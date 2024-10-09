@@ -97,7 +97,7 @@ export default class RtmEngine {
   }
 
   createClient(APP_ID: string) {
-    this.appId = APP_ID;
+    this.appId = '1a35d52dc4874d13997a411ec640b1c6';
     this.client = AgoraRTM.createInstance(this.appId);
 
     if ($config.GEO_FENCING) {

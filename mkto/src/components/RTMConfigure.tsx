@@ -145,6 +145,7 @@ const RtmConfigure = (props: any) => {
         uid: localUid.toString(),
         token: rtcProps.rtm,
       });
+     
       logger.log(LogSource.AgoraSDK, 'API', 'RTM login done');
       RTMEngine.getInstance().setLocalUID(localUid.toString());
       logger.log(LogSource.AgoraSDK, 'API', 'RTM local Uid set');
@@ -152,6 +153,7 @@ const RtmConfigure = (props: any) => {
       await setAttribute();
       logger.log(LogSource.AgoraSDK, 'Log', 'RTM setting attribute done');
     } catch (error) {
+
       logger.error(LogSource.AgoraSDK, 'Log', 'RTM login failed..Trying again');
       setTimeout(async () => {
         timerValueRef.current = timerValueRef.current + timerValueRef.current;

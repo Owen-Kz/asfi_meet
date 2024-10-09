@@ -14,6 +14,8 @@ export const permissionPopupErrorToastHeading = `permissionPopupErrorToastHeadin
 export const permissionPopupErrorToastSubHeading = `permissionPopupErrorToastSubHeading`;
 
 export const settingsPanelHeading = `settingsPanelHeading`;
+export const postersPanelHeading = `postersPanelHeading`;
+
 export const settingsPanelMicrophoneLabel = 'settingsPanelMicrophoneLabel';
 export const settingsPanelNoMicrophoneDetectedText =
   'settingsPanelNoMicrophoneDetectedText';
@@ -57,6 +59,8 @@ export interface I18nPrecallScreenLabelsInterface {
   [permissionPopupErrorToastSubHeading]?: I18nBaseType;
 
   [settingsPanelHeading]?: I18nBaseType;
+  [postersPanelHeading]?: I18nBaseType;
+
 
   [settingsPanelCameraLabel]?: I18nBaseType;
   [settingsPanelNoCameraDetectedText]?: I18nBaseType;
@@ -107,6 +111,8 @@ export const PrecallScreenLabels: I18nPrecallScreenLabelsInterface = {
     } is available. If not, plug one in and restart your browser`,
 
   [settingsPanelHeading]: 'Settings',
+  [postersPanelHeading]: 'Posters',
+
 
   [settingsPanelCameraLabel]: 'Camera',
   [settingsPanelNoCameraDetectedText]: 'No Camera Detected',

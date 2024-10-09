@@ -20,6 +20,8 @@ import {
 import Settings, {
   SettingsWithViewWrapper,
   SettingsIconButtonProps,
+  PostersWithViewWrapper,
+  PostersIconButtonProps,
 } from './Settings';
 import CopyJoinInfo, {CopyJoinInfoProps} from '../subComponents/CopyJoinInfo';
 import {SidePanelType} from '../subComponents/SidePanelEnum';
@@ -76,6 +78,7 @@ import {
   toolbarItemPeopleText,
   videoRoomRecordingText,
 } from '../language/default-labels/videoCallScreenLabels';
+import Posters from './Posters';
 
 export const ParticipantsCountView = ({
   isMobileView = false,
@@ -390,8 +393,15 @@ interface LayoutIconButtonProps {
 export const SettingsIconButton = (props: SettingsIconButtonProps) => {
   return <Settings {...props} />;
 };
+export const PostersIconButton = (props: PostersIconButtonProps) => {
+  return <Posters {...props} />;
+};
 const SettingsIconButtonWithWrapper = (props: SettingsIconButtonProps) => {
   return <SettingsWithViewWrapper {...props} />;
+};
+
+const PosterButtonWithWrapper = (props: PostersIconButtonProps) => {
+  return <PostersWithViewWrapper {...props} />;
 };
 
 export const MeetingTitleToolbarItem = () => {
@@ -467,7 +477,13 @@ export const SettingsToobarItem = () => {
     </ToolbarItem>
   );
 };
-
+export const PostersToolbarItem = () => {
+  return (
+    <ToolbarItem testID="videocall-postersicon">
+      <PosterButtonWithWrapper />
+    </ToolbarItem>
+  );
+};
 const defaultItems: ToolbarDefaultItem[] = [
   {
     align: 'start',
@@ -509,6 +525,13 @@ const defaultItems: ToolbarDefaultItem[] = [
     componentName: 'settings',
     component: SettingsToobarItem,
     order: 2,
+    hide: 'no',
+  },
+  {
+    align: 'end',
+    componentName: 'posters',
+    component: PostersToolbarItem,
+    order: 0,
     hide: 'no',
   },
 ];

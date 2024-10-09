@@ -20,8 +20,12 @@ import {useToolbarMenu} from '../utils/useMenu';
 import ToolbarMenuItem from '../atoms/ToolbarMenuItem';
 import {useActionSheet} from '../utils/useActionSheet';
 import {toolbarItemSettingText} from '../language/default-labels/videoCallScreenLabels';
+import Posters from './Posters';
 
 export interface SettingsIconButtonProps {
+  render?: (onPress: () => void, isPanelActive: boolean) => JSX.Element;
+}
+export interface PostersIconButtonProps {
   render?: (onPress: () => void, isPanelActive: boolean) => JSX.Element;
 }
 
@@ -90,9 +94,15 @@ const Settings = (props: SettingsIconButtonProps) => {
   );
 };
 
+
 export const SettingsWithViewWrapper = (props: SettingsIconButtonProps) => {
   return <Settings {...props} />;
 };
+
+export const PostersWithViewWrapper = (props: PostersIconButtonProps) => {
+  return <Posters {...props} />;
+};
+
 
 const style = StyleSheet.create({
   localButton: {

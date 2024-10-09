@@ -49,6 +49,7 @@ interface ConfigInterface {
   APP_ID: string;
   FRONTEND_ENDPOINT: string;
   BACKEND_ENDPOINT: string;
+  BACKEND_ENPOINT_LOCAL: string;
   PSTN: boolean;
   PRECALL: boolean;
   CHAT: boolean;

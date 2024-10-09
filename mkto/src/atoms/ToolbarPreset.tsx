@@ -20,6 +20,7 @@ export type ToolbarDefaultItemName =
   | 'recording'
   | 'switch-camera'
   | 'end-call'
+  | 'posters'
   | 'raise-hand'
   | 'more'
 
@@ -29,6 +30,7 @@ export type ToolbarDefaultItemName =
   | 'recording-status'
   | 'chat'
   | 'participant'
+  | 'posters'
   | 'settings';
 
 export type ToolbarDefaultItemConfig = {

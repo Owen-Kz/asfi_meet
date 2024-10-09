@@ -24,6 +24,8 @@ import {isAndroid, isIOS} from '../../utils/common';
 import ActionSheetHandle from './ActionSheetHandle';
 import Spacer from '../../atoms/Spacer';
 import Transcript from '../../subComponents/caption/Transcript';
+import PostersView from '../../components/PostersView';
+
 
 //topbar btn template is used to show icons without label text (as in desktop : bottomBar)
 
@@ -35,6 +37,7 @@ const ActionSheet = props => {
   const chatSheetRef = useRef<BottomSheetModal>(null);
   const participantsSheetRef = useRef<BottomSheetModal>(null);
   const settingsSheetRef = useRef<BottomSheetModal>(null);
+  const postersSheetRef = useRef<BottomSheetModal>(null);
   const transcriptSheetRef = useRef<BottomSheetModal>(null);
 
   // callbacks
@@ -63,6 +66,10 @@ const ActionSheet = props => {
         settingsSheetRef?.current.present();
         break;
       }
+      case SidePanelType.Posters: {
+        postersSheetRef?.current.present();
+        break;
+      }
       case SidePanelType.Transcript: {
         transcriptSheetRef?.current.present();
         break;
@@ -74,6 +81,7 @@ const ActionSheet = props => {
             chatSheetRef?.current.close();
             participantsSheetRef?.current.close();
             settingsSheetRef?.current.close();
+            postersSheetRef?.current.close();
             transcriptSheetRef?.current.close();
             bottomSheetRef?.current.present();
           }, 200);
@@ -82,6 +90,7 @@ const ActionSheet = props => {
           chatSheetRef?.current.dismiss();
           participantsSheetRef?.current.close();
           settingsSheetRef?.current.close();
+          postersSheetRef?.current.close();
           transcriptSheetRef?.current.close();
         }
 
@@ -198,7 +207,24 @@ const ActionSheet = props => {
           <SettingsView showHeader={false} />
         </BottomSheetView>
       </BottomSheetModal>
-
+      {/* Posters Action sheet  */}
+      <BottomSheetModal
+        snapPoints={['100%']}
+        ref={postersSheetRef}
+        name="PosterSheet"
+        onDismiss={onDismiss}
+        style={styles.container}
+        backgroundStyle={styles.backgroundStyle}
+        handleIndicatorStyle={styles.handleIndicatorStyle}
+        enableContentPanningGesture={false}
+        handleComponent={() => (
+          <ActionSheetHandle sidePanel={SidePanelType.Posters} />
+        )}
+        stackBehavior="push">
+        <BottomSheetView>
+          <PostersView showHeader={false} />
+        </BottomSheetView>
+      </BottomSheetModal>
       {/* Transcript Action Sheet  */}
       <BottomSheetModal
         snapPoints={['100%']}

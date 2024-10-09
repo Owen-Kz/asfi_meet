@@ -12,6 +12,8 @@ const CREATE_CHANNEL = gql`
         host
         view
       }
+      attendee
+      host
       channel
       title
       pstn {
@@ -76,6 +78,7 @@ export default function useCreateRoom(): createRoomFun {
       let roomInfo: Partial<RoomInfoContextInterface['data']> = {
         roomId: {
           attendee: '',
+          host: '',
         },
       };
       if (res?.data?.createChannel?.passphrase?.view) {

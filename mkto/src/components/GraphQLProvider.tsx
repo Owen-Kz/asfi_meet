@@ -27,10 +27,10 @@ export const GraphQLContext = createContext<{
   //@ts-ignore
   client: {},
 });
-
+// uri: `${$config.BACKEND_ENDPOINT}/v1/query`,
 const httpLink = createHttpLink({
-  uri: `${$config.BACKEND_ENDPOINT}/v1/query`,
-  credentials: 'include',
+  uri: 'https://graph-endpoint.onrender.com/',
+  // credentials: 'include',
 });
 
 const cache = new InMemoryCache();

@@ -57,6 +57,7 @@ import {
   sttSpokenLanguageToastHeading,
   sttSpokenLanguageToastSubHeading,
 } from '../../language/default-labels/videoCallScreenLabels';
+import Posters from '../../components/Posters';
 //Icon for expanding Action Sheet
 interface ShowMoreIconProps {
   isExpanded: boolean;
@@ -139,6 +140,14 @@ const SettingsIcon = () => {
   return (
     <ToolbarItem>
       <Settings />
+    </ToolbarItem>
+  );
+};
+
+const PostersIcon = () => {
+  return (
+    <ToolbarItem>
+      <Posters />
     </ToolbarItem>
   );
 };
@@ -523,6 +532,14 @@ const ActionSheetContent = props => {
       align: 'start',
       componentName: 'settings',
       component: <SettingsIcon />,
+    },
+    {
+      default: true,
+      order: 10,
+      hide: 'no',
+      align: 'start',
+      componentName: 'posters',
+      component: <PostersIcon />,
     },
     {
       default: true,

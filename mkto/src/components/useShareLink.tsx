@@ -102,9 +102,9 @@ interface ShareLinkProvideProps {
 
 const ShareLinkProvider = (props: ShareLinkProvideProps) => {
   const {
-    data: {meetingTitle, roomId, pstn, isSeparateHostLink, isHost},
+    data: {meetingTitle, roomId, attendee, host, pstn, isSeparateHostLink, isHost},
   } = useRoomInfo();
-
+  const { data } = useRoomInfo();
   const pstnLabel = useString(shareRoomPSTNLabel)();
   const pstnNumberLabel = useString(shareRoomPSTNNumberLabel)();
   const pinLabel = useString(shareRoomPSTNPinLabel)();
@@ -119,7 +119,7 @@ const ShareLinkProvider = (props: ShareLinkProvideProps) => {
   const getMeetingInvite = () => {
     let baseURL = getBaseURL();
     let stringToCopy = meetingInviteText({
-      meetingName: meetingTitle,
+      meetingName: data?.title,
       url: baseURL
         ? GetMeetingInviteURL(baseURL, isHost, roomId, isSeparateHostLink)
         : undefined,
@@ -150,11 +150,17 @@ const ShareLinkProvider = (props: ShareLinkProvideProps) => {
   const getAttendeeURLOrId = () => {
     let stringToCopy = '';
     let baseURL = getBaseURL();
-    if (roomId?.attendee) {
+    if (attendee) {
       if (baseURL) {
-        stringToCopy += `${baseURL}/${roomId.attendee}`;
+        stringToCopy += `${baseURL}/${attendee}`;
       } else {
-        stringToCopy += `${roomId.attendee}`;
+        stringToCopy += `${attendee}`;
+      }
+    } else if (roomId?.attendee) {
+      if (baseURL) {
+        stringToCopy += `${baseURL}/${roomId?.attendee}`;
+      } else {
+        stringToCopy += `${roomId?.attendee}`;
       }
     }
     return stringToCopy;
@@ -167,9 +173,17 @@ const ShareLinkProvider = (props: ShareLinkProvideProps) => {
       if (baseURL) {
         stringToCopy += `${baseURL}/${roomId.host}`;
       } else {
-        stringToCopy += `${roomId.host}`;
+        stringToCopy += `${host}`;
+      }
+    } else if (host) {
+      let baseURL = getBaseURL();
+      if (baseURL) {
+        stringToCopy += `${baseURL}/${host}`;
+      } else {
+        stringToCopy += `${host}`;
       }
     }
+
     return stringToCopy;
   };
 

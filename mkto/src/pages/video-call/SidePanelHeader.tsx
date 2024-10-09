@@ -36,6 +36,7 @@ import {useString} from '../../utils/useString';
 import {
   settingsPanelHeading,
   vbPanelHeading,
+  postersPanelHeading,
 } from '../../language/default-labels/precallScreenLabels';
 import {
   chatPanelGroupTabText,
@@ -55,6 +56,23 @@ export const SettingsHeader = props => {
     <SidePanelHeader
       centerComponent={
         <Text style={SidePanelStyles.heading}>{settingsLabel}</Text>
+      }
+      trailingIconName="close"
+      trailingIconOnPress={() => {
+        props.handleClose && props.handleClose();
+        setSidePanel(SidePanelType.None);
+      }}
+    />
+  );
+};
+export const PostersHeader = props => {
+  const {setSidePanel} = useSidePanel();
+  const postersLabel = useString(postersPanelHeading)();
+
+  return (
+    <SidePanelHeader
+      centerComponent={
+        <Text style={SidePanelStyles.heading}>{postersLabel}</Text>
       }
       trailingIconName="close"
       trailingIconOnPress={() => {

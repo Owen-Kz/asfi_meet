@@ -7,6 +7,7 @@ import Navbar, {
   ChatToolbarItem,
   ParticipantToolbarItem,
   SettingsToobarItem,
+  PostersToolbarItem,
 } from '../../components/Navbar';
 import Controls, {
   LayoutToolbarItem,
@@ -27,6 +28,8 @@ import ChatUploadStatus from '../../subComponents/chat/ChatUploadStatus';
 import {ChatEmojiButton} from '../../subComponents/chat/ChatEmoji';
 import SettingsView from '../../components/SettingsView';
 import WhiteboardButton from '../../components/whiteboard/WhiteboardButton';
+import PostersView from '../../components/PostersView';
+
 
 const ToolbarComponents = {
   MeetingTitleToolbarItem,
@@ -35,6 +38,7 @@ const ToolbarComponents = {
   ChatToolbarItem,
   ParticipantToolbarItem,
   SettingsToobarItem,
+  PostersToolbarItem,
   LayoutToolbarItem,
   InviteToolbarItem,
   RaiseHandToolbarItem,
@@ -51,6 +55,7 @@ export {
   Chat,
   Navbar,
   SettingsView,
+  PostersView,
   Controls,
   ChatBubble,
   ChatInput,

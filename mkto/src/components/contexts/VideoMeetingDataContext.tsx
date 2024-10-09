@@ -38,7 +38,9 @@ const VideoMeetingDataProvider = (props: VideoMeetingDataProviderProps) => {
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
   const hostUidsRef = useRef({hostUids});
   const attendeeUidsRef = useRef({attendeeUids});
-
+  const {isJoinDataFetched, data, isInWaitingRoom, waitingRoomStatus} =
+    useRoomInfo();
+    
   useEffect(() => {
     hostUidsRef.current.hostUids = hostUids;
   }, [hostUids]);

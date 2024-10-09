@@ -22,6 +22,7 @@ export {
   ChatInput,
   Chat,
   SettingsView,
+  PostersView,
   ChatAttachmentButton,
   ChatEmojiButton,
   ChatUploadStatus,

@@ -248,9 +248,9 @@ export default class RtcEngine {
   // Create channel profile and set it here
 
   initialize(context: RtcEngineContext) {
-    const {appId} = context;
+    const appId = '1a35d52dc4874d13997a411ec640b1c6';
     logger.log(LogSource.AgoraSDK, 'Log', 'RTC engine initialized');
-    this.appId = appId;
+    this.appId = '1a35d52dc4874d13997a411ec640b1c6';
   }
 
   getRemoteVideoStats(id: string) {
@@ -854,17 +854,18 @@ export default class RtcEngine {
     });
 
     logger.log(LogSource.AgoraSDK, 'API', 'RTC [join] trying to join channel', {
-      appId: this.appId,
+      appId: '1a35d52dc4874d13997a411ec640b1c6',
       channelName,
       token,
       optionalUid,
     });
     await this.client.join(
-      this.appId,
+      '1a35d52dc4874d13997a411ec640b1c6',
       channelName,
       token || null,
       optionalUid || null,
     );
+    
     logger.log(
       LogSource.AgoraSDK,
       'API',
@@ -1613,14 +1614,14 @@ export default class RtcEngine {
         'API',
         'RTC [join] joining channel of screenclient',
         {
-          appId: this.appId,
+          appId: '1a35d52dc4874d13997a411ec640b1c6',
           channelName,
           token,
           optionalUid,
         },
       );
       await this.screenClient.join(
-        this.appId,
+        '1a35d52dc4874d13997a411ec640b1c6',
         channelName,
         token || null,
         optionalUid || null,

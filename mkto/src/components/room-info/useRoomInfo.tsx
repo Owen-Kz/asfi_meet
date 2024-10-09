@@ -26,6 +26,8 @@ export enum WaitingRoomStatus {
 export interface RoomData {
   isHost: boolean;
   meetingTitle: string;
+  attendee: String;
+  host: String;
   roomId: {
     attendee: string;
     host?: string;
@@ -84,6 +86,8 @@ export const validateMeetingInfoData = (
     rtmToken,
     screenShareToken,
     screenShareUid,
+    attendee,
+    host,
     token,
     uid,
   } = roomInfo;
@@ -109,6 +113,8 @@ export const RoomInfoDefaultValue: RoomInfoContextInterface = {
   data: {
     isHost: false,
     meetingTitle: '',
+    attendee: null,
+    host: null,
     roomId: {
       attendee: '',
     },

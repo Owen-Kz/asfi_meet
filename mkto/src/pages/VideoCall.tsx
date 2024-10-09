@@ -171,6 +171,8 @@ const VideoCall: React.FC = () => {
     channel: null,
     uid: null,
     token: null,
+    attendee:null,
+    host:null,
     rtm: null,
     screenShareUid: null,
     screenShareToken: null,
@@ -212,6 +214,9 @@ const VideoCall: React.FC = () => {
     };
   }, []);
 
+  console.log('Phrase:', phrase);
+  console.log('SdkJoinState', SdkJoinState);
+
   useEffect(() => {
     if (!SdkJoinState.phrase) {
       useJoin(phrase)
@@ -238,9 +243,10 @@ const VideoCall: React.FC = () => {
     const sdkMeetingPath = `/${sdkMeetingPhrase}`;
 
     setCallActive(skipPrecall);
-
+   
     if (sdkMeetingDetails) {
       setQueryComplete(false);
+      
       setRoomInfo(roomInfo => {
         return {
           isJoinDataFetched: true,
@@ -287,6 +293,8 @@ const VideoCall: React.FC = () => {
         channel: data.channel,
         uid: data.uid,
         token: data.token,
+        attendee: data.attendee,
+        host: data.isHost,
         rtm: data.rtmToken,
         encryption: $config.ENCRYPTION_ENABLED
           ? {
