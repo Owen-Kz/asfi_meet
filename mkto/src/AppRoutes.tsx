@@ -81,9 +81,12 @@ function AppRoutes() {
       </AuthRoute>
       {RenderCustomRoutes()}
       <Route exact path={'/:phrase'} component={VideoCallWrapper} />
-      <Route path="*">
-        <Text>Page not found</Text>
+      {/* <Route path="/*">
+        <Redirect to={'/create'} />
       </Route>
+      <Route path="*">
+        <Redirect to={'/create'} />
+      </Route> */}
     </Switch>
   );
 }
