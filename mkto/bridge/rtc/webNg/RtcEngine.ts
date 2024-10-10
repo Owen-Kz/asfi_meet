@@ -248,9 +248,9 @@ export default class RtcEngine {
   // Create channel profile and set it here
 
   initialize(context: RtcEngineContext) {
-    const appId = $config.APP_ID;
+    const appId = '1a35d52dc4874d13997a411ec640b1c6';
     logger.log(LogSource.AgoraSDK, 'Log', 'RTC engine initialized');
-    this.appId = $config.APP_ID;
+    this.appId = '1a35d52dc4874d13997a411ec640b1c6';
   }
 
   getRemoteVideoStats(id: string) {
@@ -300,7 +300,7 @@ export default class RtcEngine {
         'RTC [setEncoderConfiguration] Error while setting video profile',
         error,
       );
-    }npm 
+    }
   }
 
   async enableAudio(): Promise<void> {
@@ -854,13 +854,13 @@ export default class RtcEngine {
     });
 
     logger.log(LogSource.AgoraSDK, 'API', 'RTC [join] trying to join channel', {
-      appId: $config.APP_ID,
+      appId: '1a35d52dc4874d13997a411ec640b1c6',
       channelName,
       token,
       optionalUid,
     });
     await this.client.join(
-      $config.APP_ID,
+      '1a35d52dc4874d13997a411ec640b1c6',
       channelName,
       token || null,
       optionalUid || null,
@@ -1614,14 +1614,14 @@ export default class RtcEngine {
         'API',
         'RTC [join] joining channel of screenclient',
         {
-          appId: $config.APP_ID,
+          appId: "1a35d52dc4874d13997a411ec640b1c6",
           channelName,
           token,
           optionalUid,
         },
       );
       await this.screenClient.join(
-        $config.APP_ID,
+        "1a35d52dc4874d13997a411ec640b1c6",
         channelName,
         token || null,
         optionalUid || null,

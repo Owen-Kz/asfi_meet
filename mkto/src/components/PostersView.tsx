@@ -9,30 +9,16 @@
  information visit https://appbuilder.agora.io. 
 *********************************************
 */
-import React, {useContext, useEffect, useRef, useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  TextInput,
-  Platform,
-  WebView
-} from 'react-native';
+import React from 'react';
+import {View, StyleSheet, ScrollView} from 'react-native';
 
-import {
-  isMobileUA,
-  isWebInternal,
-  useIsSmall,
-} from '../utils/common';
+import {isMobileUA, isWebInternal, useIsSmall} from '../utils/common';
 
 import CommonStyles from './CommonStyles';
 import {useLayout} from '../utils/useLayout';
 import {getGridLayoutName} from '../pages/video-call/DefaultLayouts';
 import {PostersHeader} from '../pages/video-call/SidePanelHeader';
 import useCaptionWidth from '../../src/subComponents/caption/useCaptionWidth';
-
 
 const PostersView = props => {
   const {hideName = false, showHeader = true} = props;
@@ -43,18 +29,22 @@ const PostersView = props => {
   // if (!roomInfo || !roomInfo.data) {
   //   return <Text>Loading room information...</Text>; // Fallback UI while roomInfo is being fetched
   // }
-    // Utility function to get the cookie value by name
-    function getCookie(name) {
-      const nameEQ = name + "=";
-      const ca = document.cookie.split(';');
-      for(let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+// Utility function to get the cookie value by name
+  function getCookie(name) {
+    const nameEQ = name + '=';
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) === ' ') {
+        c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) {
+          return c.substring(nameEQ.length, c.length);
+        }
       }
-      return null;
     }
-    const ChannelSecret = JSON.parse(getCookie("roomInfo")).room_uuid;
+    return null;
+  }
+  const ChannelSecret = JSON.parse(getCookie('roomInfo')).room_uuid;
 
   return (
     <View
@@ -96,9 +86,9 @@ const style = StyleSheet.create({
     height: '100%',
     flex: 1, // Ensures the container takes up available space
   },
- iframeStyle: {
+  iframeStyle: {
     width: '100%', // Full width
-    height: '100vh', // Full height of the viewport
+    height: '100%', // Full height of the viewport
     border: 'none', // Remove the iframe border
   },
 });

@@ -16,7 +16,7 @@ import Create from './pages/Create';
 import {Route, Switch, Redirect} from './components/Router';
 import AuthRoute from './auth/AuthRoute';
 import {IDPAuth} from './auth/IDPAuth';
-import {Text} from 'react-native';
+// import {Text} from 'react-native';
 import {useCustomization} from 'customization-implementation';
 import {CUSTOM_ROUTES_PREFIX, CustomRoutesInterface} from 'customization-api';
 import PrivateRoute from './components/PrivateRoute';
@@ -68,7 +68,12 @@ function AppRoutes() {
   return (
     <Switch>
       <Route exact path={'/'}>
-        <Redirect to={'/create'} />
+        {/* <Redirect to={'/create'} /> */}
+
+        {() => {
+          window.location.href = 'https://asfischolar.net'; // Replace with the external URL you want to redirect to
+          return null;
+        }}
       </Route>
       <Route exact path={'/authorize/:token?'}>
         <IDPAuth />
@@ -80,13 +85,10 @@ function AppRoutes() {
         <Create />
       </AuthRoute>
       {RenderCustomRoutes()}
-      <Route exact path={'/:phrase'} component={VideoCallWrapper} />
-      {/* <Route path="/*">
-        <Redirect to={'/create'} />
-      </Route>
+      <Route exact path={'/v3/:phrase'} component={VideoCallWrapper} />
       <Route path="*">
-        <Redirect to={'/create'} />
-      </Route> */}
+        <Redirect to={'/'} />
+      </Route>
     </Switch>
   );
 }

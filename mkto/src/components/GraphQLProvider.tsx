@@ -29,7 +29,7 @@ export const GraphQLContext = createContext<{
 });
 // uri: `${$config.BACKEND_ENDPOINT}/v1/query`,
 const httpLink = createHttpLink({
-  uri: 'https://graph.asfischolar.com/',
+  uri: 'https://t11.asfirj.org/v8/graphql',
   // credentials: 'include',
 });
 
