@@ -78,14 +78,26 @@ function AppRoutes() {
       <Route exact path={'/authorize/:token?'}>
         <IDPAuth />
       </Route>
-      <AuthRoute exact path={'/join'}>
+      <Route exact path={'/join'}>
         <Join />
-      </AuthRoute>
-      <AuthRoute exact path={'/create'}>
+      </Route>
+      <Route exact path={'/create'}>
         <Create />
-      </AuthRoute>
+      </Route>
+      <Route exact path={'/v3/create'}>
+        <Redirect to={'/create'} />
+      </Route>
+      <Route exact path={'/v3/create'}>
+        <Redirect to={'/join'} />
+      </Route>
+
       {RenderCustomRoutes()}
       <Route exact path={'/v3/:phrase'} component={VideoCallWrapper} />
+
+      <Route exact path={'/v6/:phrase'}>
+        <Redirect to={'/v3/:phrase'} />
+      </Route>
+
       <Route path="*">
         <Redirect to={'/'} />
       </Route>
