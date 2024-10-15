@@ -9,23 +9,25 @@
  information visit https://appbuilder.agora.io. 
 *********************************************
 */
-import React from 'react';
+import React, {useEffect} from 'react';
 import Join from './pages/Join';
 import VideoCall from './pages/VideoCall';
 import Create from './pages/Create';
 import {Route, Switch, Redirect} from './components/Router';
 import AuthRoute from './auth/AuthRoute';
 import {IDPAuth} from './auth/IDPAuth';
-// import {Text} from 'react-native';
+import {Text} from 'react-native';
 import {useCustomization} from 'customization-implementation';
 import {CUSTOM_ROUTES_PREFIX, CustomRoutesInterface} from 'customization-api';
 import PrivateRoute from './components/PrivateRoute';
 import RecordingBotRoute from './components/recording-bot/RecordingBotRoute';
 import {useIsRecordingBot} from './subComponents/recording/useIsRecordingBot';
+import {LogSource, logger} from './logger/AppBuilderLogger';
+import {isValidReactComponent} from './utils/common';
 
 function VideoCallWrapper(props) {
-  const {isRecordingBotRoute} = useIsRecordingBot();
-  return isRecordingBotRoute ? (
+  const {isRecordingBot} = useIsRecordingBot();
+  return isRecordingBot ? (
     <RecordingBotRoute history={props.history}>
       <VideoCall />
     </RecordingBotRoute>
@@ -38,6 +40,8 @@ function VideoCallWrapper(props) {
 
 function AppRoutes() {
   const CustomRoutes = useCustomization(data => data?.customRoutes);
+  const AppConfig = useCustomization(data => data?.config);
+  const {defaultRootFallback: DefaultRootFallback} = AppConfig || {};
   const RenderCustomRoutes = () => {
     try {
       return (
@@ -68,38 +72,28 @@ function AppRoutes() {
   return (
     <Switch>
       <Route exact path={'/'}>
-        {/* <Redirect to={'/create'} /> */}
-
-        {() => {
-          window.location.href = 'https://asfischolar.net'; // Replace with the external URL you want to redirect to
-          return null;
-        }}
+        {DefaultRootFallback &&
+        (typeof DefaultRootFallback === 'object' ||
+          typeof DefaultRootFallback === 'function') &&
+        isValidReactComponent(DefaultRootFallback) ? (
+          <DefaultRootFallback />
+        ) : (
+          <Redirect to={'/create'} />
+        )}
       </Route>
       <Route exact path={'/authorize/:token?'}>
         <IDPAuth />
       </Route>
-      <Route exact path={'/join'}>
+      <AuthRoute exact path={'/join'}>
         <Join />
-      </Route>
-      <Route exact path={'/create'}>
+      </AuthRoute>
+      <AuthRoute exact path={'/create'}>
         <Create />
-      </Route>
-      <Route exact path={'/v3/create'}>
-        <Redirect to={'/create'} />
-      </Route>
-      <Route exact path={'/v3/create'}>
-        <Redirect to={'/join'} />
-      </Route>
-
+      </AuthRoute>
       {RenderCustomRoutes()}
-      <Route exact path={'/v3/:phrase'} component={VideoCallWrapper} />
-
-      <Route exact path={'/v6/:phrase'}>
-        <Redirect to={'/v3/:phrase'} />
-      </Route>
-
+      <Route exact path={'/:phrase'} component={VideoCallWrapper} />
       <Route path="*">
-        <Redirect to={'/'} />
+        <Text>Page not found</Text>
       </Route>
     </Switch>
   );
